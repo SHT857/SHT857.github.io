@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		/* body{
+            background-color: tomato;
+            opacity: 0.7;
+        } */
+		#outer {
+			width: 550px;
+			height: 242px;
+			position: absolute;
+			border-radius: 5px;
+			bottom: 0;
+			top: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+			overflow: hidden;
+		}
+
+		#an {
+			width: 100%;
+			height: 48px;
+			bottom: 0px;
+			position: absolute;
+		}
+
+		#an ul {
+			width: 100px;
+			height: 13.6px;
+			bottom: 10px;
+			right: 20px;
+			position: absolute;
+		}
+
+		#an li {
+			width: 18px;
+			height: 15px;
+			background-size: 15px;
+			float: left;
+			margin-left: 2px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		#an li img {
+			position: absolute;
+			transition: all 0.3s;
+			width: 0px;
+			height: 0px;
+		}
+
+		#an li a {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			display: block;
+			background-color: white;
+		}
+
+		#an a:hover {
+			border: 2.5px solid white;
+			width: 8px;
+			height: 8px;
+			background-color: #1890ff;
+			transition: all 0.2s;
+		}
+
+		#kuang {
+			display: flex;
+			position: absolute;
+			left: 0px;
+		}
+
+		#kuang li a img {
+			height: 242px;
+			width: 550px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="outer">
+		<ul id="kuang">
+			<li>
+				<a name="img" href="javascript:;"><img src="1.jpg" alt="" /></a>
+			</li>
+			<li>
+				<a name="img" href="javascript:;"><img src="2.png" alt="" /></a>
+			</li>
+			<li>
+				<a name="img" href="javascript:;"><img src="3.jpg" alt="" /></a>
+			</li>
+			<li>
+				<a name="img" href="javascript:;"><img src="4.png" alt="" /></a>
+			</li>
+			<li>
+				<a name="img" href="javascript:;"><img src="5.png" alt="" /></a>
+			</li>
+			<li>
+				<a name="img" href="javascript:;"><img src="1.jpg" alt="" /></a>
+			</li>
+		</ul>
+		<ul id="an">
+			<ul>
+				<li>
+					<img name="on" src="6.png" alt="" /><a name="ab" href="javascript:;"></a>
+				</li>
+				<li>
+					<img name="on" src="6.png" alt="" /><a name="ab" href="javascript:;"></a>
+				</li>
+				<li>
+					<img name="on" src="6.png" alt="" /><a name="ab" href="javascript:;"></a>
+				</li>
+				<li>
+					<img name="on" src="6.png" alt="" /><a name="ab" href="javascript:;"></a>
+				</li>
+				<li>
+					<img name="on" src="6.png" alt="" /><a name="ab" href="javascript:;"></a>
+				</li>
+			</ul>
+		</ul>
+	</div>
+	<script>
+		var kuang = document.getElementById("kuang");
+		var tp = document.getElementsByName("img");
+		var an = document.getElementsByName("ab");
+		var on = document.getElementsByName("on");
+
+		lbt(kuang, tp, an, on);
+
+		function lbt(outer, img, btn, on) {
+			var index = 0;
+			var timer;
+			for (let i = 0; i < btn.length; i++) {
+				btn[i].onclick = function () {
+					this.name = i;
+					index = this.name;
+					log();
+					move(
+						outer,
+						-parseInt(img[0].offsetWidth) * i,
+						100,
+						"left",
+						function () {
+							dsq();
+						}
+					);
+					clearTimeout(timer);
+				};
+			}
+			for (let j = 0; j < img.length; j++) {
+				img[j] = function () {
+					this.name = j;
+					index = this.name;
+					log();
+					move(
+						outer,
+						-parseInt(img[0].offsetWidth) * i,
+						20,
+						"left",
+						function () {}
+					);
+				};
+			}
+
+			function log() {
+				if (index >= img.length - 1) {
+					index = 0;
+					outer.style.left = 0 + "px";
+				}
+				for (let j = 0; j < on.length; j++) {
+					on[j].style.width = "0px";
+					on[j].style.height = "0px";
+				}
+				on[index].style.width = "18px";
+				on[index].style.height = "18px";
+			}
+
+			function dsq() {
+				timer = setInterval(function () {
+					index++;
+					index %= img.length;
+					move(
+						outer,
+						-parseInt(img[0].offsetWidth) * index,
+						30,
+						"left",
+						function () {
+							log(index);
+						}
+					);
+				}, 3000);
+			}
+
+			function move(obj, target, speed, fx, callback) {
+				var a = parseInt(window.getComputedStyle(obj)[fx]);
+				if (a > target) {
+					speed = -speed;
+				}
+				clearInterval(obj.timer);
+				obj.timer = setInterval(function () {
+					var a = parseInt(window.getComputedStyle(obj)[fx]);
+					var b = a + speed;
+					if ((speed < 0 && b < target) || (speed > 0 && b > target)) {
+						b = target;
+					}
+					obj.style[fx] = b + "px";
+					if (b == target) {
+						clearInterval(obj.timer);
+						callback && callback();
+					}
+				}, 30);
+			}
+			dsq();
+		}
+	</script>
+</body>
+
+</html>
